@@ -8,25 +8,27 @@ def find_set(node,parent): #time - O(1)
         return node
     return find_set(parent[node],parent)
 
-def union_set(u,v,w,parent,mstcost):
+def union_set(u,v,parent):
     if u>v:
         u,v=v,u
     p_u=find_set(u,parent)
     p_v=find_set(v,parent)
 
     if p_u!=p_v:
-        mstcost+=w
         parent[p_v]=p_u
-    
-    return mstcost
 
 def kruskals_mst(edges):
     edges.sort(key=lambda x:x[2])
-    parent=[-1]*6
+    parent=[-1]*(6+1)
     mstcost=0
     for edge in edges: #time - O(E)
-        mstcost+=union_set(edge[0],edge[1],edge[2],parent,mstcost)
+        u=edge[0]
+        v=edge[1]
+        w=edge[2]
 
+        if find_set(u,parent)!=find_set(v,parent):
+            mstcost+=w
+            union_set(u,v,parent)
     print(mstcost)
 
 if __name__=='__main__':
